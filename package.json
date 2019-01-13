@@ -1,8 +1,8 @@
 {
   "name": "nuxt-ssr-cache",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Cache middleware for nuxt's SSR rendering.",
-  "main": "index.js",
+  "main": "lib/middleware.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
