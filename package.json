@@ -1,0 +1,32 @@
+{
+  "name": "nuxt-ssr-cache",
+  "version": "1.0.0",
+  "description": "Cache middleware for nuxt's SSR rendering.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/arash16/nuxt-ssr-cache.git"
+  },
+  "keywords": [
+    "nuxt",
+    "ssr",
+    "cache",
+    "redis",
+    "vue",
+    "spa"
+  ],
+  "author": "Arash Shakery <arash.shakery@gmail.com> (arash16.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/arash16/nuxt-cache/issues"
+  },
+  "homepage": "https://github.com/arash16/nuxt-cache#readme",
+  "dependencies": {
+    "cache-manager": "^2.9.0",
+    "cache-manager-redis": "^0.6.0",
+    "redis": "^2.8.0"
+  }
+}
