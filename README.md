@@ -24,20 +24,32 @@ then inside your `nuxt.config.js` add cache config:
         // ....
         
         cache: {
+            version: pkg.version,
             store: {
+              // multi cache stores pages in all caches
+              // later tries to read them in sequential order
+              // in this example it first tries to read from memory
+              // if not found, it tries to read from redis
               type: 'multi',
               stores: [
                 {
                   type: 'memory',
+                  
+                  // maximum number of pages to store in memory
+                  // if limit is reached, least recently used page
+                  // is removed. 
                   max: 100,
+                  
+                  // number of seconds to store this page in cache 
                   ttl: 60,
                 },
                 {
                   type: 'redis',
                   host: 'localhost',
-                  prefix: '',
                   ttl: 10 * 60,
                   configure: [
+                    // these values are configured
+                    // on redis upon initialization
                     ['maxmemory', '200mb'],
                     ['maxmemory-policy', 'allkeys-lru'],
                   ],
@@ -45,7 +57,8 @@ then inside your `nuxt.config.js` add cache config:
               ],
             },
             pages: [
-              '/',
+              // these are prefixes of pages that need to be cached
+              // if you want to cache all pages, just include '/'
               '/page1',
               '/page2',
             ],
@@ -58,6 +71,9 @@ then inside your `nuxt.config.js` add cache config:
 In this example we have used a multi tiered cache. 
 You could also use a simpler memory/redis only cache.
 `pages` is an array of route-prefixes that should be cached.
+
+If you provide a version, it will be stored inside cache.
+Later when you deploy a new version, old cache will be automatically purged.
 
 ## License
 MIT
