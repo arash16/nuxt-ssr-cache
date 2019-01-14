@@ -1,6 +1,6 @@
 {
   "name": "nuxt-ssr-cache",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Cache middleware for nuxt's SSR rendering.",
   "main": "lib/middleware.js",
   "scripts": {
@@ -21,9 +21,9 @@
   "author": "Arash Shakery <arash.shakery@gmail.com> (arash16.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/arash16/nuxt-cache/issues"
+    "url": "https://github.com/arash16/nuxt-ssr-cache/issues"
   },
-  "homepage": "https://github.com/arash16/nuxt-cache#readme",
+  "homepage": "https://github.com/arash16/nuxt-ssr-cache#readme",
   "dependencies": {
     "cache-manager": "^2.9.0",
     "cache-manager-redis": "^0.6.0",

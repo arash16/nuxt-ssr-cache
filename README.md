@@ -1,4 +1,4 @@
-# nuxt-cache
+# nuxt-ssr-cache
 Cache middleware for nuxt's SSR rendering.
 
 ## Setup
