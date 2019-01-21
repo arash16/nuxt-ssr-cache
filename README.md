@@ -8,23 +8,19 @@ or
 
 ```yarn add nuxt-ssr-cache```
 
-after creating `Nuxt` instance, call `nuxtCache`:
-
-```javascript
-// ....
-const nuxt = new Nuxt(config);
-const nuxtCache = require('nuxt-ssr-cache');
-nuxtCache(nuxt, config);
-```
-
 then inside your `nuxt.config.js` add cache config:
 
 ```javascript
     module.exports = {
+        // If you provide a version, it will be stored inside cache.
+        // Later when you deploy a new version, old cache will be automatically purged.
+        version: pkg.version,
+
         // ....
-        
+        modules: [
+            'nuxt-ssr-cache',
+        ],
         cache: {
-            version: pkg.version,
             store: {
               // multi cache stores pages in all caches
               // later tries to read them in sequential order
@@ -34,13 +30,13 @@ then inside your `nuxt.config.js` add cache config:
               stores: [
                 {
                   type: 'memory',
-                  
+
                   // maximum number of pages to store in memory
                   // if limit is reached, least recently used page
-                  // is removed. 
+                  // is removed.
                   max: 100,
-                  
-                  // number of seconds to store this page in cache 
+
+                  // number of seconds to store this page in cache
                   ttl: 60,
                 },
                 {
@@ -63,17 +59,14 @@ then inside your `nuxt.config.js` add cache config:
               '/page2',
             ],
           },
-          
+
           // ...
     };
 ```
 
-In this example we have used a multi tiered cache. 
+In this example we have used a multi tiered cache.
 You could also use a simpler memory/redis only cache.
 `pages` is an array of route-prefixes that should be cached.
-
-If you provide a version, it will be stored inside cache.
-Later when you deploy a new version, old cache will be automatically purged.
 
 ## License
 MIT
