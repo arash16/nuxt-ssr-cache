@@ -13,17 +13,19 @@ then inside your `nuxt.config.js` add cache config:
 ```javascript
     module.exports = {
         // If you provide a version, it will be stored inside cache.
-        // Later when you deploy a new version, old cache will be automatically purged.
+        // Later when you deploy a new version, old cache will be 
+        // automatically purged.
         version: pkg.version,
 
         // ....
+
         modules: [
             'nuxt-ssr-cache',
         ],
         cache: {
-            // if you're serving multiple host names (with differing results)
-            // from the same server, set this option to true. (cache keys will
-            // be prefixed by your host name)
+            // if you're serving multiple host names (with differing
+            // results) from the same server, set this option to true.
+            // (cache keys will be prefixed by your host name)
             useHostPrefix: false,
             store: {
               // multi cache stores pages in all caches
