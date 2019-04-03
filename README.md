@@ -21,6 +21,10 @@ then inside your `nuxt.config.js` add cache config:
             'nuxt-ssr-cache',
         ],
         cache: {
+            // if you're serving multiple host names (with differing results)
+            // from the same server, set this option to true. (cache keys will
+            // be prefixed by your host name)
+            useHostPrefix: false,
             store: {
               // multi cache stores pages in all caches
               // later tries to read them in sequential order
