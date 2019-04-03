@@ -13,7 +13,7 @@ then inside your `nuxt.config.js` add cache config:
 ```javascript
     module.exports = {
         // If you provide a version, it will be stored inside cache.
-        // Later when you deploy a new version, old cache will be 
+        // Later when you deploy a new version, old cache will be
         // automatically purged.
         version: pkg.version,
 
@@ -63,9 +63,12 @@ then inside your `nuxt.config.js` add cache config:
               // if you want to cache all pages, just include '/'
               '/page1',
               '/page2',
-              
+
               // you can also pass a regular expression to test a path
-              /\/page3\/\d+/,
+              /^\/page3\/\d+$/,
+
+              // to cache only root route, use a regular expression
+              /^\/$/
             ],
           },
 
