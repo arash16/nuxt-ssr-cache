@@ -57,6 +57,9 @@ then inside your `nuxt.config.js` add cache config:
               // if you want to cache all pages, just include '/'
               '/page1',
               '/page2',
+              
+              // you can also pass a regular expression to test a path
+              /\/page3\/\d+/,
             ],
           },
 
