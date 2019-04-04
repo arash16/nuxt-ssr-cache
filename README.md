@@ -26,7 +26,11 @@ then inside your `nuxt.config.js` add cache config:
             // if you're serving multiple host names (with differing
             // results) from the same server, set this option to true.
             // (cache keys will be prefixed by your host name)
+            // if your server is behind a reverse-proxy, please use
+            // express or something else that uses 'X-Forwarded-Host'
+            // header field to provide req.hostname (actual host name)
             useHostPrefix: false,
+
             store: {
               // multi cache stores pages in all caches
               // later tries to read them in sequential order
