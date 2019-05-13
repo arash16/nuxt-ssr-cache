@@ -10,7 +10,10 @@ function memoryCache(config) {
 function redisCache(config) {
     if (config && Array.isArray(config.configure)) {
         const redis = require('redis');
-        const client = redis.createClient(config);
+        const client = redis.createClient({
+            retry_strategy() {},
+            ...config,
+        });
 
         Promise
             .all(config.configure.map(options => new Promise((resolve, reject) => {
@@ -27,9 +30,7 @@ function redisCache(config) {
 
     return cacheManager.caching({
         store: require('cache-manager-redis'),
-        retry_strategy() {
-            return undefined;
-        },
+        retry_strategy() {},
         ...config,
     });
 }
