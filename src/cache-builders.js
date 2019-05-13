@@ -10,7 +10,7 @@ function memoryCache(config) {
 function redisCache(config) {
     if (config && Array.isArray(config.configure)) {
         const redis = require('redis');
-        const client = redis.createClient(config.client);
+        const client = redis.createClient(config);
 
         Promise
             .all(config.configure.map(options => new Promise((resolve, reject) => {
