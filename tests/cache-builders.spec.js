@@ -3,8 +3,8 @@ const makeCache = require('../lib/cache-builders');
 describe('memoryCache', () => {
     it('should return cached result', async () => {
         const cache = makeCache({ type: 'memory' });
-        cache.set('sample', 'data');
-        expect(await cache.get('sample')).to.be.eql('data');
+        cache.setAsync('sample', 'data');
+        expect(await cache.getAsync('sample')).to.be.eql('data');
     });
 });
 
@@ -14,8 +14,8 @@ describe('redisCache', () => {
             type: 'redis',
             host: 'localhost'
         });
-        cache.set('sample', 'data');
-        expect(await cache.get('sample')).to.be.eql('data');
+        cache.setAsync('sample', 'data');
+        expect(await cache.getAsync('sample')).to.be.eql('data');
     });
 
     it('should configure on initialization', async () => {
@@ -29,7 +29,20 @@ describe('redisCache', () => {
                 ['maxmemory-policy', 'allkeys-lru'],
             ],
         });
-        cache.set('sample', 'data');
-        expect(await cache.get('sample')).to.be.eql('data');
+        cache.setAsync('sample', 'data');
+        expect(await cache.getAsync('sample')).to.be.eql('data');
     });
+});
+
+describe('memcached', () => {
+  it('should return cached result', async () => {
+    const cache = makeCache({
+      type: 'memcached',
+      options: {
+        hosts: ['127.0.0.1:11211'],
+      },
+    });
+    await cache.setAsync('sample', 'data');
+    expect(await cache.getAsync('sample')).to.be.eql('data');
+  });
 });
