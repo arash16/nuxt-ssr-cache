@@ -5,10 +5,11 @@ const makeCache = require('./cache-builders');
 
 function cleanIfNewVersion(cache, version) {
     if (!version) return;
-    return cache.get('appVersion')
+    return cache.getAsync('appVersion')
         .then(function (oldVersion) {
             if (oldVersion !== version) {
-                return cache.reset();
+                console.log(`Cache updated from ${oldVersion} to ${version}`);
+                return cache.resetAsync();
                 // unfortunately multi cache doesn't return a promise
                 // and we can't await for it so as to store new version
                 // immediately after reset.
@@ -18,7 +19,7 @@ function cleanIfNewVersion(cache, version) {
 
 function tryStoreVersion(cache, version) {
     if (!version || cache.versionSaved) return;
-    return cache.set('appVersion', version, {ttl: null})
+    return cache.setAsync('appVersion', version, {ttl: null})
         .then(() => { cache.versionSaved = true; });
 }
 
@@ -66,13 +67,13 @@ module.exports = function cacheRenderer(nuxt, config) {
             return renderRoute(route, context)
                 .then(function(result) {
                     if (!result.error) {
-                        cache.set(cacheKey, serialize(result));
+                        cache.setAsync(cacheKey, serialize(result));
                     }
                     return result;
                 });
         }
 
-        return cache.get(cacheKey)
+        return cache.getAsync(cacheKey)
             .then(function (cachedResult) {
                 if (cachedResult) {
                     return deserialize(cachedResult);

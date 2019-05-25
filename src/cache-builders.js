@@ -1,3 +1,4 @@
+const Promise = require('bluebird');
 const cacheManager = require('cache-manager');
 
 function memoryCache(config) {
@@ -60,7 +61,7 @@ function makeCache(config = { type: 'memory' }) {
         throw new Error('Unknown store type: ' + config.type)
     }
 
-    return builder(config);
+    return Promise.promisifyAll(builder(config));
 }
 
 module.exports = makeCache;
