@@ -35,23 +35,32 @@ function redisCache(config) {
     });
 }
 
+function memcachedCache(config) {
+    return cacheManager.caching({
+        store: require('cache-manager-memcached-store'),
+        ...config,
+    });
+}
+
 function multiCache(config) {
     const stores = config.stores.map(makeCache);
     return cacheManager.multiCaching(stores);
 }
 
-function makeCache(config = { store: 'memory' }) {
-    if (config.type === 'redis') {
-        return redisCache(config);
+const cacheBuilders = {
+    memory: memoryCache,
+    multi: multiCache,
+    redis: redisCache,
+    memcached: memcachedCache,
+};
+
+function makeCache(config = { type: 'memory' }) {
+    const builder = cacheBuilders[config.type];
+    if (!builder) {
+        throw new Error('Unknown store type: ' + config.type)
     }
 
-    if (config.type === 'memory') {
-        return memoryCache(config);
-    }
-
-    if (config.type === 'multi') {
-        return multiCache(config);
-    }
+    return builder(config);
 }
 
 module.exports = makeCache;
