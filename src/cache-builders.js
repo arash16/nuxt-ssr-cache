@@ -61,16 +61,7 @@ function makeCache(config = { type: 'memory' }) {
         throw new Error('Unknown store type: ' + config.type)
     }
 
-    const cache = Promise.promisifyAll(builder(config));
-
-    // multi_caching has bug, not binding isCacheableValue,
-    // here we bind all store functions explicitly until
-    // fixed inside underlying repository
-    const { store } = cache;
-    if (store && typeof store.isCacheableValue === 'function') {
-      store.isCacheableValue = store.isCacheableValue.bind(store);
-    }
-    return cache;
+    return Promise.promisifyAll(builder(config));
 }
 
 module.exports = makeCache;
