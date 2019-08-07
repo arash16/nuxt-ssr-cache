@@ -40,7 +40,8 @@ module.exports = function cacheRenderer(nuxt, config) {
           return config.cache.isCacheable(path, context);
         }
 
-        return config.cache.pages.some(pat =>
+        return !context.res.spa &&
+            config.cache.pages.some(pat =>
                 pat instanceof RegExp
                     ? pat.test(path)
                     : path.startsWith(pat)
