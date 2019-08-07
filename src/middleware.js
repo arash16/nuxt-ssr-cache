@@ -35,12 +35,25 @@ module.exports = function cacheRenderer(nuxt, config) {
         return;
     }
 
-    function isCacheFriendly(path) {
+    function isCacheFriendly(path, context) {
+        if (typeof (config.cache.isCacheable) === 'function') {
+          return config.cache.isCacheable(path, context);
+        }
+
         return config.cache.pages.some(pat =>
-            pat instanceof RegExp
-                ? pat.test(path)
-                : path.startsWith(pat)
+                pat instanceof RegExp
+                    ? pat.test(path)
+                    : path.startsWith(pat)
         );
+    }
+
+    function defaultCacheKeyBuilder(route, context) {
+      const hostname = context.req.hostname || context.req.host;
+      const cacheKey = config.cache.useHostPrefix === true && hostname
+        ? path.join(hostname, route)
+        : route;
+
+      if (isCacheFriendly(route, context)) return cacheKey;
     }
 
     const currentVersion = config.version || config.cache.version;
@@ -50,18 +63,11 @@ module.exports = function cacheRenderer(nuxt, config) {
     const renderer = nuxt.renderer;
     const renderRoute = renderer.renderRoute.bind(renderer);
     renderer.renderRoute = function(route, context) {
-        const hostname = context.req.hostname || context.req.host;
-    	const cacheKey = config.cache.useHostPrefix === true && hostname
-    	                ? path.join(hostname, route)
-                        : route;
-
         // hopefully cache reset is finished up to this point.
         tryStoreVersion(cache, currentVersion);
 
-
-        if (!isCacheFriendly(route)) {
-            return renderRoute(route, context);
-        }
+        const cacheKey = (config.cache.key || defaultCacheKeyBuilder)(route, context);
+        if (!cacheKey) return renderRoute(route, context);
 
         function renderSetCache(){
             return renderRoute(route, context)
