@@ -62,8 +62,9 @@ module.exports = function cacheRenderer(nuxt, config) {
     cleanIfNewVersion(cache, currentVersion);
 
     const renderer = nuxt.renderer;
-    const renderRoute = renderer.renderRoute.bind(renderer);
-    renderer.renderRoute = function(route, context) {
+    if(renderer !== undefined){
+      const renderRoute = renderer.renderRoute.bind(renderer);
+      renderer.renderRoute = function(route, context) {
         // hopefully cache reset is finished up to this point.
         tryStoreVersion(cache, currentVersion);
 
@@ -71,25 +72,26 @@ module.exports = function cacheRenderer(nuxt, config) {
         if (!cacheKey) return renderRoute(route, context);
 
         function renderSetCache(){
-            return renderRoute(route, context)
-                .then(function(result) {
-                    if (!result.error) {
-                        cache.setAsync(cacheKey, serialize(result));
-                    }
-                    return result;
-                });
+          return renderRoute(route, context)
+            .then(function(result) {
+              if (!result.error) {
+                cache.setAsync(cacheKey, serialize(result));
+              }
+              return result;
+            });
         }
 
         return cache.getAsync(cacheKey)
-            .then(function (cachedResult) {
-                if (cachedResult) {
-                    return deserialize(cachedResult);
-                }
+          .then(function (cachedResult) {
+            if (cachedResult) {
+              return deserialize(cachedResult);
+            }
 
-                return renderSetCache();
-            })
-            .catch(renderSetCache);
-    };
+            return renderSetCache();
+          })
+          .catch(renderSetCache);
+      };
+    }
 
     return cache;
 };
