@@ -31,7 +31,7 @@ module.exports = function cacheRenderer(nuxt, config) {
       config = this.options;
     }
 
-    if (!config.cache || !Array.isArray(config.cache.pages) || !config.cache.pages.length) {
+    if (!config.cache || !Array.isArray(config.cache.pages) || !config.cache.pages.length || !nuxt.renderer) {
         return;
     }
 
