@@ -44,11 +44,17 @@ module.exports = {
       // to cache only root route, use a regular expression
       /^\/$/
     ],
-    
+
     key(route, context) {
       // custom function to return cache key, when used previous
-      // properties (useHostPrefix, pages) are ignored. return 
+      // properties (useHostPrefix, pages) are ignored. return
       // falsy value to bypass the cache
+    },
+
+    isCacheableValue(cacheValue) {
+      // custom function to judge whether the cached value is legal,
+      // if it is legal, set the cached value,
+      // otherwise do not set
     },
 
     store: {
