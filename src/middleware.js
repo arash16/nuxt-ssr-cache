@@ -48,6 +48,16 @@ module.exports = function cacheRenderer(nuxt, config) {
         );
     }
 
+    function isValueRightful(cb, cacheValue) {
+        if (typeof cb === 'function' && cb(cacheValue)) {
+            return true;
+        }
+        else if (typeof cb === 'function' && !cb(cacheValue)) {
+            return false;
+        }
+        return true;
+      }
+
     function defaultCacheKeyBuilder(route, context) {
       var hostname = context.req && context.req.hostname || context.req && context.req.host;
       if(!hostname) return;
@@ -70,11 +80,12 @@ module.exports = function cacheRenderer(nuxt, config) {
 
         const cacheKey = (config.cache.key || defaultCacheKeyBuilder)(route, context);
         if (!cacheKey) return renderRoute(route, context);
+        var isCacheableValue = config.cache.isCacheableValue;
 
         function renderSetCache(){
             return renderRoute(route, context)
                 .then(function(result) {
-                    if (!result.error) {
+                    if (!result.error && isValueRightful(isCacheableValue, serialize(result))) {
                         cache.setAsync(cacheKey, serialize(result));
                     }
                     return result;
