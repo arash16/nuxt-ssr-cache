@@ -1,4 +1,6 @@
 const makeCache = require('../lib/cache-builders');
+const chai = require('chai');
+const expect = chai.expect;
 
 describe('memoryCache', () => {
     it('should return cached result', async () => {
