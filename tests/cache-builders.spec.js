@@ -12,7 +12,7 @@ describe('redisCache', () => {
     it('should return cached result', async () => {
         const cache = makeCache({
             type: 'redis',
-            host: 'localhost'
+            host: process.env.CACHE_HOST || 'localhost'
         });
         cache.setAsync('sample', 'data');
         expect(await cache.getAsync('sample')).to.be.eql('data');
@@ -32,6 +32,17 @@ describe('redisCache', () => {
         cache.setAsync('sample', 'data');
         expect(await cache.getAsync('sample')).to.be.eql('data');
     });
+});
+
+describe('ioredisCache', () => {
+  it('should return cached result', async () => {
+      const cache = makeCache({
+          type: 'ioredis',
+          host: process.env.CACHE_HOST || 'localhost'
+      });
+      cache.setAsync('sample', 'data');
+      expect(await cache.getAsync('sample')).to.be.eql('data');
+  });
 });
 
 describe('memcached', () => {
