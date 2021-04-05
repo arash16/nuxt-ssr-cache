@@ -31,8 +31,13 @@ module.exports = function cacheRenderer(nuxt, config) {
       config = this.options;
     }
 
-    if (!config.cache || !Array.isArray(config.cache.pages) || !config.cache.pages.length || !nuxt.renderer) {
+    if (!config.cache || !nuxt.renderer) {
         return;
+    }
+
+    const methodKeyDoesNotExist = Boolean(config.cache.key);
+    if (methodKeyDoesNotExist && (!Array.isArray(config.cache.pages) || !config.cache.pages.length)) {
+      return;
     }
 
     function isCacheFriendly(path, context) {
