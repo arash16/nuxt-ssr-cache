@@ -35,7 +35,7 @@ module.exports = function cacheRenderer(nuxt, config) {
         return;
     }
 
-    const methodKeyDoesNotExist = Boolean(config.cache.key);
+    const methodKeyDoesNotExist = !Boolean(config.cache.key);
     if (methodKeyDoesNotExist && (!Array.isArray(config.cache.pages) || !config.cache.pages.length)) {
       return;
     }
