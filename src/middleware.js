@@ -55,7 +55,7 @@ module.exports = function cacheRenderer(nuxt, config) {
         ? path.join(hostname, route)
         : route;
 
-      if (isCacheFriendly(route, context)) return cacheKey;
+      return cacheKey;
     }
 
     const currentVersion = config.version || config.cache.version;
@@ -68,7 +68,7 @@ module.exports = function cacheRenderer(nuxt, config) {
         // hopefully cache reset is finished up to this point.
         tryStoreVersion(cache, currentVersion);
 
-        const cacheKey = (config.cache.key || defaultCacheKeyBuilder)(route, context);
+        const cacheKey = isCacheFriendly(route, context) ? (config.cache.key || defaultCacheKeyBuilder)(route, context) : '';
         if (!cacheKey) return renderRoute(route, context);
 
         function renderSetCache(){
