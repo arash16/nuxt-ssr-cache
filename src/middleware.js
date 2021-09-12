@@ -68,14 +68,17 @@ module.exports = function cacheRenderer(nuxt, config) {
         // hopefully cache reset is finished up to this point.
         tryStoreVersion(cache, currentVersion);
 
-        const cacheKey = (config.cache.key || defaultCacheKeyBuilder)(route, context);
+        const keyConfig = (config.cache.key || defaultCacheKeyBuilder)(route, context);
+        const cacheKey = typeof keyConfig === 'object' ? keyConfig.key : keyConfig
+        const ttl = typeof keyConfig === 'object' ? keyConfig.ttl : config.cache.store.ttl
+
         if (!cacheKey) return renderRoute(route, context);
 
         function renderSetCache(){
             return renderRoute(route, context)
                 .then(function(result) {
                     if (!result.error && !result.redirected) {
-                        cache.setAsync(cacheKey, serialize(result));
+                        cache.setAsync(cacheKey, serialize(result), { ttl });
                     }
                     return result;
                 });
